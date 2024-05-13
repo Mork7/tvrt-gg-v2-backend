@@ -109,8 +109,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUserProfile = asyncHandler(async (req, res) => {
+    // Find user by id
     const user = await User.findById(req.user._id);
 
+    // If user exists, return user data
     if (user) {
         return res.status(200).json({
             _id: user._id,
@@ -119,29 +121,51 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
             isAdmin: user.isAdmin,
         });
     } else {
+        // If user does not exist, throw an error
         res.status(404);
         throw new Error('User not found');
     }
 });
 
 const updateCurrentProfile = asyncHandler(async (req, res) => {
+    // Find user by id
     const user = await User.findById(req.user._id);
 
+    // If user exists, update user data
     if (user) {
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
 
+        // If password is provided, hash the password and update the user password
         if (req.body.password) {
             user.password = await bcrypt.hash(req.body.password, 10);
         }
 
+        // Save updated user data
         const updatedUser = await user.save();
 
+        // Return updated user data
         return res.status(200).json({
             _id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
         });
+    } else {
+        // If user does not exist, throw an error
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        if (user.isAdmin) {
+            throw new Error('Admin user cannot be deleted');
+        }
+        await user.deleteOne(user._id);
+        return res.status(200).json({ message: 'User removed' });
     } else {
         res.status(404);
         throw new Error('User not found');
@@ -154,5 +178,6 @@ export {
     logoutUser,
     getAllUsers,
     getCurrentUserProfile,
-    updateCurrentProfile
+    updateCurrentProfile,
+    deleteUser,
 };
