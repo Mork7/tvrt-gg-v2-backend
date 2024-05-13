@@ -6,6 +6,7 @@ import cors from 'cors';
 
 // Utils
 import connectDB from './config/connectDB.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -20,3 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 app.listen(port, () => {
     console.log(`Server is running on port ${port} 🚀`);
 });
+
+// Routes
+
+// User Routes
+
+app.use('/users', userRoutes);
