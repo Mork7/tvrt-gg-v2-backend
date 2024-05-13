@@ -158,8 +158,10 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
+    // Find user by id
     const user = await User.findById(req.params.id);
 
+    // If user exists, delete user
     if (user) {
         if (user.isAdmin) {
             throw new Error('Admin user cannot be deleted');
@@ -167,10 +169,47 @@ const deleteUser = asyncHandler(async (req, res) => {
         await user.deleteOne(user._id);
         return res.status(200).json({ message: 'User removed' });
     } else {
+        // If user does not exist, throw an error
         res.status(404);
         throw new Error('User not found');
     }
 });
+
+const getUserById = asyncHandler(async (req, res) => {
+    // Find user by id and exclude password from user data
+    const user = await User.findById(req.params.id).select('-password');
+
+    // If user exists, return user data
+    if (user) {
+        return res.status(200).json(user);
+    } else {
+        // If user does not exist, throw an error
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+const updateUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select('-password');
+
+    if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.isAdmin = Boolean(req.body.isAdmin);
+
+        const updatedUser = await user.save();
+
+        return res.status(200).json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+})
 
 export {
     createUser,
@@ -180,4 +219,6 @@ export {
     getCurrentUserProfile,
     updateCurrentProfile,
     deleteUser,
+    getUserById,
+    updateUserById
 };
