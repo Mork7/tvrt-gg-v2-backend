@@ -87,7 +87,7 @@ const loginUser = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
     try {
         // Check if user is logged in
-        if(!req.cookies.jwt) {
+        if (!req.cookies.jwt) {
             res.status(400);
             throw new Error('No user logged in');
         }
@@ -106,14 +106,12 @@ const getAllUsers = asyncHandler(async (req, res) => {
     // Find all users using mongoose find method and return them
     const users = await User.find({});
     return res.status(200).json(users);
-
 });
 
 const getCurrentUserProfile = asyncHandler(async (req, res) => {
-
     const user = await User.findById(req.user._id);
 
-    if(user) {
+    if (user) {
         return res.status(200).json({
             _id: user._id,
             name: user.name,
@@ -124,9 +122,37 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
+});
 
-});    
+const updateCurrentProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
 
+    if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
 
- 
-export { createUser, loginUser, logoutUser, getAllUsers, getCurrentUserProfile };
+        if (req.body.password) {
+            user.password = await bcrypt.hash(req.body.password, 10);
+        }
+
+        const updatedUser = await user.save();
+
+        return res.status(200).json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+export {
+    createUser,
+    loginUser,
+    logoutUser,
+    getAllUsers,
+    getCurrentUserProfile,
+    updateCurrentProfile
+};
