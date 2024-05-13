@@ -102,4 +102,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
 });
 
-export { createUser, loginUser, logoutUser };
+const getAllUsers = asyncHandler(async (req, res) => {
+    // Find all users using mongoose find method and return them
+    const users = await User.find({});
+    return res.status(200).json(users);
+
+});
+export { createUser, loginUser, logoutUser, getAllUsers };

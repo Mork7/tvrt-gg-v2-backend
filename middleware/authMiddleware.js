@@ -4,8 +4,9 @@ import asyncHandler from './asyncHandler.js';
 
 const authenictateUser = asyncHandler(async (req, res, next) => {
     // read the token from the cookie
-    let token = req.cookie.jwt;
-
+    // I accidentally wrote req.cookie.jwt instead of req.cookies.jwt; I forgot the 's' in cookies, future Mark, don't forget again 🤪
+    let token = req.cookies.jwt;
+  
     // if the token exists in the cookie then verify the token and extract the userId from it and attach it to the request object as req.user so that it can be accessed in the next middleware function or route handler function that uses this middleware function
     if (token) {
         try {
