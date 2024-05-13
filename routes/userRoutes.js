@@ -17,10 +17,8 @@ import {
 
 const router = express.Router();
 
-router
-    .route('/')
-    .post(createUser)
-    .get(authenticateUser, authorizeAdmin, getAllUsers);
+// Public routes
+router.route('/register').post(createUser);
 router.route('/login').post(loginUser);
 router.route('/logout').post(logoutUser);
 router
@@ -28,7 +26,8 @@ router
     .get(authenticateUser, getCurrentUserProfile)
     .put(authenticateUser, updateCurrentProfile);
 
-    // Admin routes
+// Admin routes
+router.route('/').get(authenticateUser, authorizeAdmin, getAllUsers);
 router
     .route('/:id')
     .delete(authenticateUser, authorizeAdmin, deleteUser)
