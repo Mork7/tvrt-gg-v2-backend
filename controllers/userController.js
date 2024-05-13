@@ -44,4 +44,36 @@ const createUser = asyncHandler(async (req, res) => {
     }
 });
 
-export { createUser };
+const loginUser = asyncHandler(async (req, res) => {  
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        res.status(400);
+        throw new Error('Please fill all fields');
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.status(401);
+        throw new Error('Invalid email or password');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+        res.status(401);
+        throw new Error('Invalid email or password');
+    }
+
+    generateToken(res, user._id);
+
+    return res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+    });
+});
+
+export { createUser, loginUser };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser } from '../controllers/userController.js';
+import { createUser, loginUser } from '../controllers/userController.js';
 import {
     authenictateUser,
     authorizeAdmin,
@@ -8,6 +8,6 @@ import {
 const router = express.Router();
 
 router.route('/').post(createUser);
-
+router.route('/login').get(loginUser);
 
 export default router;
