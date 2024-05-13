@@ -44,30 +44,38 @@ const createUser = asyncHandler(async (req, res) => {
     }
 });
 
-const loginUser = asyncHandler(async (req, res) => {  
+const loginUser = asyncHandler(async (req, res) => {
+    // Destructure email and password from req.body
     const { email, password } = req.body;
 
+    // Check if email and password are provided
     if (!email || !password) {
         res.status(400);
         throw new Error('Please fill all fields');
     }
 
+    // Find user by email
     const user = await User.findOne({ email });
 
+    // Check if user exists
     if (!user) {
         res.status(401);
         throw new Error('Invalid email or password');
     }
 
+    // Check if password matches
     const isMatch = await bcrypt.compare(password, user.password);
 
+    // If password does not match, throw an error
     if (!isMatch) {
         res.status(401);
         throw new Error('Invalid email or password');
     }
 
+    // generateToken will take the user id and generate a token and set-cookie for the user
     generateToken(res, user._id);
 
+    // Return user data
     return res.status(200).json({
         _id: user._id,
         name: user.name,
@@ -76,4 +84,22 @@ const loginUser = asyncHandler(async (req, res) => {
     });
 });
 
-export { createUser, loginUser };
+const logoutUser = asyncHandler(async (req, res) => {
+    try {
+        // Check if user is logged in
+        if(!req.cookies.jwt) {
+            res.status(400);
+            throw new Error('No user logged in');
+        }
+        // Clear cookie
+        res.clearCookie('jwt');
+        // Return success message
+        return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        // If error, return error message and throw error
+        res.status(400);
+        throw new Error('No user logged in');
+    }
+});
+
+export { createUser, loginUser, logoutUser };
