@@ -106,12 +106,14 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
 });
 
+// admin dashboard
 const getAllUsers = asyncHandler(async (req, res) => {
     // Find all users using mongoose find method and return them
     const users = await User.find({});
     return res.status(200).json(users);
 });
 
+// /profile
 const getCurrentUserProfile = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.user._id);
@@ -123,6 +125,8 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            following: user.following,
+            friends: user.friends,
         });
     } else {
         // If user does not exist, throw an error
@@ -131,6 +135,7 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
     }
 });
 
+// /profile
 const updateCurrentProfile = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.user._id);
@@ -160,7 +165,7 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 });
-
+// /:id
 const deleteUser = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.params.id);
@@ -215,6 +220,18 @@ const updateUserById = asyncHandler(async (req, res) => {
     }
 });
 
+const getCurrentUserFollowing = asyncHandler(async (req, res) => { 
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        console.log(user)
+        return res.status(200).json(user.following);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
 export {
     createUser,
     loginUser,
@@ -225,4 +242,5 @@ export {
     deleteUser,
     getUserById,
     updateUserById,
+    getCurrentUserFollowing,
 };
