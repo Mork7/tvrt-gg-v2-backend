@@ -15,7 +15,13 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+
+const corsOptions = {
+    origin: process.env.FRONTEND_URI, // Replace with your frontend's domain
+    credentials: true, // Allow credentials (cookies)
+};
+app.use(cors(corsOptions));
+
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(port, () => {

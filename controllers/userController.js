@@ -92,7 +92,11 @@ const logoutUser = asyncHandler(async (req, res) => {
             throw new Error('No user logged in');
         }
         // Clear cookie
-        res.clearCookie('jwt');
+        res.clearCookie('jwt', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'Strict', // Or 'Lax' depending on your requirement
+        });
         // Return success message
         return res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
@@ -209,7 +213,7 @@ const updateUserById = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
-})
+});
 
 export {
     createUser,
@@ -220,5 +224,5 @@ export {
     updateCurrentProfile,
     deleteUser,
     getUserById,
-    updateUserById
+    updateUserById,
 };
