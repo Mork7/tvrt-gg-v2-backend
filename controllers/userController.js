@@ -145,7 +145,7 @@ const getCurrentUserFollowing = asyncHandler(async (req, res) => {
     }
 });
 
-// profile
+// ✅
 const updateCurrentProfile = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.user._id);
@@ -171,6 +171,38 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
         });
     } else {
         // If user does not exist, throw an error
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+const addToUserFollowing = asyncHandler(async (req, res) => {
+    // Find user in the database by id
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        const { summonerName, tag, region } = req.body;
+
+        // Check if the summoner already exists in the following list
+        const alreadyFollowing = user.following.some(
+            (summoner) =>
+                summoner.summonerName === summonerName &&
+                summoner.tag === tag &&
+                summoner.region === region
+        );
+
+        // If the summoner already exists in the following list, return an error
+        if (alreadyFollowing) {
+            res.status(400).json({
+                message: 'User is already following this summoner',
+            });
+        } else {
+            // If the summoner does not exist in the following list, add the summoner to the following list
+            user.following.push({ summonerName, tag, region });
+            await user.save();
+            res.status(200).json(user.following);
+        }
+    } else {
         res.status(404);
         throw new Error('User not found');
     }
@@ -234,7 +266,6 @@ const updateUserById = asyncHandler(async (req, res) => {
     }
 });
 
-
 const getAllUsers = asyncHandler(async (req, res) => {
     // Find all users using mongoose find method and return them
     const users = await User.find({});
@@ -252,4 +283,5 @@ export {
     getUserById,
     updateUserById,
     getCurrentUserFollowing,
+    addToUserFollowing,
 };

@@ -9,7 +9,8 @@ import {
     deleteUser,
     getUserById,
     updateUserById,
-    getCurrentUserFollowing
+    getCurrentUserFollowing,
+    addToUserFollowing
 } from '../controllers/userController.js';
 import {
     authenticateUser,
@@ -26,7 +27,7 @@ router
     .route('/profile')
     .get(authenticateUser, getCurrentUserProfile)
     .put(authenticateUser, updateCurrentProfile);
-router.route('/following').get(authenticateUser, getCurrentUserFollowing);
+router.route('/following').get(authenticateUser, getCurrentUserFollowing).put(authenticateUser, addToUserFollowing);
 
 // Admin routes
 router.route('/').get(authenticateUser, authorizeAdmin, getAllUsers);
