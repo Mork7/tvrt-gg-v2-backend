@@ -3,6 +3,7 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import generateToken from '../utils/generateToken.js';
 import bcrypt from 'bcryptjs';
 
+// ✅
 const createUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -44,6 +45,7 @@ const createUser = asyncHandler(async (req, res) => {
     }
 });
 
+// ✅
 const loginUser = asyncHandler(async (req, res) => {
     // Destructure email and password from req.body
     const { email, password } = req.body;
@@ -81,9 +83,12 @@ const loginUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
+        following: user.following,
+        friends: user.friends,
     });
 });
 
+// ✅
 const logoutUser = asyncHandler(async (req, res) => {
     try {
         // Check if user is logged in
@@ -106,14 +111,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
 });
 
-// admin dashboard
-const getAllUsers = asyncHandler(async (req, res) => {
-    // Find all users using mongoose find method and return them
-    const users = await User.find({});
-    return res.status(200).json(users);
-});
-
-// /profile
+// ✅
 const getCurrentUserProfile = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.user._id);
@@ -135,7 +133,19 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
     }
 });
 
-// /profile
+// ✅
+const getCurrentUserFollowing = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        return res.status(200).json(user.following);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+// profile
 const updateCurrentProfile = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.user._id);
@@ -165,7 +175,9 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 });
-// /:id
+
+// ADMIN STUFF
+// :id
 const deleteUser = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.params.id);
@@ -184,6 +196,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
+// :id
 const getUserById = asyncHandler(async (req, res) => {
     // Find user by id and exclude password from user data
     const user = await User.findById(req.params.id).select('-password');
@@ -198,6 +211,7 @@ const getUserById = asyncHandler(async (req, res) => {
     }
 });
 
+// :id
 const updateUserById = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id).select('-password');
 
@@ -220,15 +234,11 @@ const updateUserById = asyncHandler(async (req, res) => {
     }
 });
 
-const getCurrentUserFollowing = asyncHandler(async (req, res) => { 
-    const user = await User.findById(req.user._id);
 
-    if (user) {
-        return res.status(200).json(user.following);
-    } else {
-        res.status(404);
-        throw new Error('User not found');
-    }
+const getAllUsers = asyncHandler(async (req, res) => {
+    // Find all users using mongoose find method and return them
+    const users = await User.find({});
+    return res.status(200).json(users);
 });
 
 export {

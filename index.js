@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URI, // Replace with your frontend's domain
+    origin: process.env.FRONTEND_URI, 
     credentials: true, // Allow credentials (cookies)
 };
 app.use(cors(corsOptions));
