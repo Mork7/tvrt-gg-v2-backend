@@ -11,6 +11,13 @@ const userSchema = new mongoose.Schema({
     ],
     // An array of accounts one follows, so we can display them in a taable
     following: { type: Array, default: [] },
+    summonerDetails: {
+        type: Object,
+        summonerName: String,
+        tag: String,
+        region: String,
+        default: {},
+    },
 });
 
 const User = mongoose.model('User', userSchema);
