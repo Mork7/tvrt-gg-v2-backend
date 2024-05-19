@@ -208,7 +208,28 @@ const addToUserFollowing = asyncHandler(async (req, res) => {
         }
     } else {
         res.status(404);
-        throw new Error('User not found');
+        throw new Error('Summoner not found');
+    }
+});
+
+const removeSummonerFromFollowing = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        const { summonerName, tag, region } = req.body;
+
+        // remove user from following list
+        const updatedFollowing = user.following.filter(
+            () =>
+                summonerName !== summonerName &&
+                tag !== tag &&
+                region !== region
+        );
+
+        user.following = updatedFollowing;
+    } else {
+        res.status(404);
+        throw new Error('Summoner not found');
     }
 });
 
@@ -288,4 +309,5 @@ export {
     updateUserById,
     getCurrentUserFollowing,
     addToUserFollowing,
+    removeSummonerFromFollowing,
 };

@@ -10,7 +10,8 @@ import {
     getUserById,
     updateUserById,
     getCurrentUserFollowing,
-    addToUserFollowing
+    addToUserFollowing,
+    removeSummonerFromFollowing
 } from '../controllers/userController.js';
 import {
     authenticateUser,
@@ -27,7 +28,7 @@ router
     .route('/profile')
     .get(authenticateUser, getCurrentUserProfile)
     .put(authenticateUser, updateCurrentProfile);
-router.route('/following').get(authenticateUser, getCurrentUserFollowing).put(authenticateUser, addToUserFollowing);
+router.route('/following').get(authenticateUser, getCurrentUserFollowing).put(authenticateUser, addToUserFollowing).delete(authenticateUser, removeSummonerFromFollowing);
 
 // Admin routes
 router.route('/').get(authenticateUser, authorizeAdmin, getAllUsers);
