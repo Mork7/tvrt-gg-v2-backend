@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 // ✅
 const createUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, summonerName, tag, region } = req.body;
 
     if (!name || !email || !password) {
         res.status(400);
@@ -25,6 +25,7 @@ const createUser = asyncHandler(async (req, res) => {
         name,
         email,
         password: hashedPassword,
+        summonerDetails: { summonerName, tag, region },
     });
 
     try {
@@ -85,6 +86,7 @@ const loginUser = asyncHandler(async (req, res) => {
         isAdmin: user.isAdmin,
         following: user.following,
         friends: user.friends,
+        summonerDetails: user.summonerDetails,
     });
 });
 
