@@ -212,21 +212,20 @@ const addToUserFollowing = asyncHandler(async (req, res) => {
     }
 });
 
+// ✅
 const removeSummonerFromFollowing = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-        const { summonerName, tag, region } = req.body;
+        const { summonerName, tag } = req.body;
 
         // remove user from following list
-        const updatedFollowing = user.following.filter(
-            () =>
-                summonerName !== summonerName &&
-                tag !== tag &&
-                region !== region
+        user.following = user.following.filter(
+            (summoner) => summoner.summonerName !== summonerName || summoner.tag !== tag
         );
 
-        user.following = updatedFollowing;
+        await user.save();
+        res.status(200).json(user.following);
     } else {
         res.status(404);
         throw new Error('Summoner not found');
