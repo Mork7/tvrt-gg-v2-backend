@@ -180,7 +180,7 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
 });
 
 // ✅
-const addToUserFollowing = asyncHandler(async (req, res) => {
+const addSummonerToFollowing = asyncHandler(async (req, res) => {
     // Find user in the database by id
     const user = await User.findById(req.user._id);
 
@@ -307,6 +307,6 @@ export {
     getUserById,
     updateUserById,
     getCurrentUserFollowing,
-    addToUserFollowing,
+    addSummonerToFollowing,
     removeSummonerFromFollowing,
 };
