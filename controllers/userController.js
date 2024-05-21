@@ -128,6 +128,7 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
             isAdmin: user.isAdmin,
             following: user.following,
             friends: user.friends,
+            summonerDetails: user.summonerDetails,
         });
     } else {
         // If user does not exist, throw an error
@@ -157,6 +158,7 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
     if (user) {
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
+        user.summonerDetails = req.body.summonerDetails || user.summonerDetails;
 
         // If password is provided, hash the password and update the user password
         if (req.body.password) {
@@ -171,6 +173,7 @@ const updateCurrentProfile = asyncHandler(async (req, res) => {
             _id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
+            summonerDetails: updatedUser.summonerDetails,
         });
     } else {
         // If user does not exist, throw an error
