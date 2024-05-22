@@ -270,7 +270,7 @@ const getUserById = asyncHandler(async (req, res) => {
     }
 });
 
-// :id
+// ✅
 const updateUserById = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id).select('-password');
 
@@ -285,7 +285,7 @@ const updateUserById = asyncHandler(async (req, res) => {
             _id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
-            isAdmin: updatedUser.isAdmin,
+            summonerDetails: updatedUser.summonerDetails,
         });
     } else {
         res.status(404);
@@ -293,6 +293,7 @@ const updateUserById = asyncHandler(async (req, res) => {
     }
 });
 
+// ✅
 const getAllUsers = asyncHandler(async (req, res) => {
     // Find all users using mongoose find method and return them
     const users = await User.find({});

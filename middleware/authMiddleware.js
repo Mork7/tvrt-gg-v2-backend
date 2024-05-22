@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import asyncHandler from './asyncHandler.js';
 
+// This middleware function is used to authenticate the user
 const authenticateUser = asyncHandler(async (req, res, next) => {
     // read the token from the cookies
     // I accidentally wrote req.cookie.jwt instead of req.cookies.jwt; I forgot the 's' in cookies, future Mark: don't forget again 🤪
@@ -27,7 +28,9 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
     }
 });
 
-const authorizeAdmin = asyncHandler(async (req, res, next) => {
+// This middleware function is used to check if the user is an admin
+const authorizeAdmin = asyncHandler(async (req, res, next) => { 
+    // If the user is an admin, then call the next middleware function or route handler function
     if (req.user && req.user.isAdmin) {
         console.log('User is an admin');
         next();
