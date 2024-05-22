@@ -1,6 +1,7 @@
 // Packages
 import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config({ path: './.env' });
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -8,7 +9,6 @@ import cors from 'cors';
 import connectDB from './config/connectDB.js';
 import userRoutes from './routes/userRoutes.js';
 
-dotenv.config();
 const port = process.env.PORT || 5000;
 connectDB();
 
