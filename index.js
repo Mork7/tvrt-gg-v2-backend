@@ -17,10 +17,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URI, 
+    origin: process.env.FRONTEND_URI,
     credentials: true, // Allow credentials (cookies)
 };
 app.use(cors(corsOptions));
+
+app.get('/', (req, res) => {
+    res.send('API is running...');
+});
 
 app.use(express.urlencoded({ extended: true }));
 
