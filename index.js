@@ -22,11 +22,18 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
 app.use(express.urlencoded({ extended: true }));
+
+console.log('Environment Variables:');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
+console.log('MONGO_PRODUCTION_URI:', process.env.MONGO_PRODUCTION_URI);
+console.log('FRONTEND_URI:', process.env.FRONTEND_URI);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port} 🚀`);
