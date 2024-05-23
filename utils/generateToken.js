@@ -16,8 +16,10 @@ const generateToken = (res, userId) => {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
             // Restricting the cookie from being sent in cross-site requests, which helps mitigate cross-site request forgery (CSRF) attacks.
+            sameSite: 'None',
             maxAge: 30 * 24 * 60 * 60 * 1000,
             path: '/',
+            domain: 'tvrt-gg-v2-backend.onrender.com',
         });
 
         console.log('Token generated successfully');

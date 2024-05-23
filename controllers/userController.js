@@ -103,7 +103,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         res.clearCookie('jwt', {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'Strict', // Or 'Lax' depending on your requirement
+            sameSite: 'Lax', // Or 'Lax' depending on your requirement
         });
         // Return success message
         return res.status(200).json({ message: 'Logged out successfully' });
