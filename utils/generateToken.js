@@ -17,6 +17,7 @@ const generateToken = (res, userId) => {
             secure: process.env.NODE_ENV !== 'development',
             // Restricting the cookie from being sent in cross-site requests, which helps mitigate cross-site request forgery (CSRF) attacks.
             maxAge: 30 * 24 * 60 * 60 * 1000,
+            path: '/',
         });
 
         console.log('Token generated successfully');
