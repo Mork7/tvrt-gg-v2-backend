@@ -16,10 +16,16 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+const corsOrigin =
+    process.env.NODE_ENV === 'development'
+        ? 'http://localhost:5173'
+        : ['https://tvrtgaming.com', 'https://www.tvrtgaming.com'];
+
 const corsOptions = {
-    origin: process.env.FRONTEND_URI,
+    origin: corsOrigin,
     credentials: true, // Allow credentials (cookies)
 };
+
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: true }));

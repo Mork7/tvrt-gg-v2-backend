@@ -13,6 +13,7 @@ const generateToken = (res, userId) => {
         // Restricting the cookie from being sent in cross-site requests, which helps mitigate cross-site request forgery (CSRF) attacks.
         sameSite: 'strict',
         maxAge: 30 * 24 * 60 * 60 * 1000,
+        domain: '.tvrtgaming.com',
     });
 
     console.log('Token generated successfully');
