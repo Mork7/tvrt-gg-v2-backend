@@ -4,7 +4,7 @@ import asyncHandler from './asyncHandler.js';
 
 // This middleware function is used to authenticate the user
 const authenticateUser = asyncHandler(async (req, res, next) => {
-    console.log('Cookies:', req.cookies); // Log all cookies
+    // console.log('Cookies:', req.cookies); // Log all cookies
     // read the token from the cookies
     // I accidentally wrote req.cookie.jwt instead of req.cookies.jwt; I forgot the 's' in cookies, future Mark: don't forget again 🤪
     const token = req.cookies.jwt;
@@ -21,7 +21,9 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
         req.user = await User.findById(decoded.userId).select('-password');
 
         if (!req.user) {
-            return res.status(401).json({ message: 'Not authorized, user not found' });
+            return res
+                .status(401)
+                .json({ message: 'Not authorized, user not found' });
         }
 
         console.log('User authenticated successfully');
