@@ -103,7 +103,8 @@ const logoutUser = asyncHandler(async (req, res) => {
         res.clearCookie('jwt', {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'Lax', // Or 'Lax' depending on your requirement
+            sameSite: 'Strict', // Or 'Lax' depending on your requirement
+            domain: '.tvrtgaming.com',
         });
         // Return success message
         return res.status(200).json({ message: 'Logged out successfully' });
@@ -224,7 +225,8 @@ const removeSummonerFromFollowing = asyncHandler(async (req, res) => {
 
         // remove user from following list
         user.following = user.following.filter(
-            (summoner) => summoner.summonerName !== summonerName || summoner.tag !== tag
+            (summoner) =>
+                summoner.summonerName !== summonerName || summoner.tag !== tag
         );
 
         await user.save();
