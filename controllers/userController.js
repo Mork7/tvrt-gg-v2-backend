@@ -86,7 +86,6 @@ const loginUser = asyncHandler(async (req, res) => {
         email: user.email,
         isAdmin: user.isAdmin,
         following: user.following,
-        friends: user.friends,
         summonerDetails: user.summonerDetails,
     });
 });
