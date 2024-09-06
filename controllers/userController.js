@@ -237,7 +237,7 @@ const removeSummonerFromFollowing = asyncHandler(async (req, res) => {
 });
 
 // ADMIN STUFF
-// :id
+// ✅
 const deleteUser = asyncHandler(async (req, res) => {
     // Find user by id
     const user = await User.findById(req.params.id);
@@ -256,7 +256,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
-// :id
+// ✅
 const getUserById = asyncHandler(async (req, res) => {
     // Find user by id and exclude password from user data
     const user = await User.findById(req.params.id).select('-password');
